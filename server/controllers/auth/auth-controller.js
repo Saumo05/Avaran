@@ -72,16 +72,30 @@ const loginUser = async (req, res) => {
       { expiresIn: "60m" }
     ); //Create a token for the logged in user
 
-    res.cookie("token", token, { httpOnly: true, secure: false }).json({
+    //secure to true for deployment in render
+    // res.cookie("token", token, { httpOnly: true, secure: true }).json({
+    //   success: true,
+    //   message: "Logged in successfully",
+    //   user: {
+    //     email: checkUser.email,
+    //     role: checkUser.role,
+    //     id: checkUser._id,
+    //     userName: checkUser.userName,
+    //   },
+    // }); //cookie for keeping the user logged in
+
+    //For deployment instead of storing the token we are passing it
+    res.status(200).json({
       success: true,
       message: "Logged in successfully",
+      token,
       user: {
         email: checkUser.email,
         role: checkUser.role,
         id: checkUser._id,
         userName: checkUser.userName,
       },
-    }); //cookie for keeping the user logged in
+    });
   } catch (e) {
     console.log(e);
     res.status(500).json({
@@ -100,8 +114,31 @@ const logoutUser = (req, res) => {
 };
 
 //auth middleware
+//Used when cookies
+// const authMiddleware = async (req, res, next) => {
+//   const token = req.cookies.token;
+//   if (!token)
+//     return res.status(401).json({
+//       success: false,
+//       message: "Unauthorised user",
+//     });
+
+//   try {
+//     const decoded = jwt.verify(token, "CLIENT_SECRET_KEY"); //Verifying the token against the CLIENT_SECRET_KEY
+//     req.user = decoded;
+//     next(); //Then, next() is called to pass control to the next middleware or route handler (in this case, the route handler for /check-auth):
+//   } catch (error) {
+//     res.status(401).json({
+//       success: false,
+//       message: "Unauthorised user",
+//     });
+//   }
+// };
+
+//For deployment get the token from header
 const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
   if (!token)
     return res.status(401).json({
       success: false,
