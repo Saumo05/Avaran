@@ -1,4 +1,6 @@
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID; // Replace with your Razorpay Key ID
 const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET; // Replace with your Razorpay Key Secret

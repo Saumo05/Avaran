@@ -38,7 +38,7 @@ export default function App() {
 
   if (isLoading) return <Skeleton className="w-[300px] h-[200px] " />;
 
-  console.log(isLoading, user);
+  console.log(import.meta.env.VITE_API_URL, "env");
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden bg-white">

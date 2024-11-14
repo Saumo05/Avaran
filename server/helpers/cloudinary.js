@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { v2 as cloudinary } from "cloudinary";
 
 import multer from "multer";
@@ -14,7 +17,7 @@ async function imageUploadUtil(file) {
   const result = await cloudinary.uploader.upload(file, {
     resource_type: "auto",
   });
-
+  console.log(process.env.CLOUDINARY_API_KEY);
   return result;
 }
 
